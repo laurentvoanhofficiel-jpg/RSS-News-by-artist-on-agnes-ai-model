@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Style Journal — Actualité en 4 tableaux</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;background:#0d0d11;color:#e6e6ea;min-height:100vh;padding:1rem 1rem 12rem;font-size:14px;line-height:1.5}
+.wrap{max-width:1400px;margin:0 auto}
+header{text-align:center;padding:1.5rem 0;border-bottom:1px solid #23232b;margin-bottom:1.5rem}
+h1{font-family:Georgia,serif;font-size:2.5rem;font-weight:300;margin-bottom:.4rem;background:linear-gradient(135deg,#f472b6 0%,#fb923c 30%,#facc15 55%,#a78bfa 80%,#60a5fa 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.05}
+.sub{font-family:Georgia,serif;font-style:italic;font-size:.85rem;color:#7a7a88}
+.kata{font-size:.7rem;letter-spacing:.4em;color:#facc15;opacity:.75;text-transform:uppercase;margin-bottom:.5rem}
+.banner{background:linear-gradient(135deg,rgba(244,114,182,.07),rgba(167,139,250,.06));border:1px solid #23232b;border-left:3px solid #f472b6;border-radius:4px;padding:1rem 1.15rem;font-size:.78rem;color:#9a9aa8;margin-bottom:1.2rem;line-height:1.65;font-family:Georgia,serif}
+.banner strong{color:#e6e6ea}
+.banner .hl-p{color:#f9a8d4}.banner .hl-y{color:#fcd34d}.banner .hl-v{color:#c4b5fd}.banner .hl-b{color:#7dd3fc}
+.card{background:#15151c;border:1px solid #23232b;border-radius:5px;margin-bottom:1rem;overflow:hidden}
+.card-head{padding:.85rem 1rem;border-bottom:1px solid #23232b;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:#d0d0d8;font-weight:600;font-family:Georgia,serif}
+.card-head .badge{font-size:.6rem;padding:.15rem .5rem;border:1px solid #52525b;color:#fcd34d;border-radius:2px;letter-spacing:.1em;background:rgba(82,82,91,.15)}
+.card-body{padding:1rem}
+textarea,input[type=text],input[type=number]{width:100%;background:#0a0a0e;border:1px solid #2a2a34;border-radius:4px;padding:.7rem .85rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.78rem;color:#e6e6ea;outline:none}
+textarea:focus,input:focus{border-color:#f472b6;box-shadow:0 0 0 3px rgba(244,114,182,.15)}
+textarea{min-height:80px;resize:vertical;line-height:1.55}
+.btn{width:100%;padding:.75rem;border-radius:4px;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid;transition:all .15s;font-family:Georgia,serif}
+.btn-amber{background:linear-gradient(135deg,rgba(250,204,21,.15),rgba(244,114,182,.1));border-color:#a16207;color:#fcd34d}
+.btn-amber:hover:not(:disabled){background:rgba(250,204,21,.25)}
+.btn-amber:disabled{opacity:.3;cursor:not-allowed}
+.btn-red{background:transparent;border-color:#7f1d1d;color:#f87171;display:none;margin-top:.6rem}
+.btn-red.visible{display:block}
+.btn-slate{background:transparent;border-color:#3a3a44;color:#9a9aa8;font-size:.66rem;padding:.5rem;font-family:-apple-system,sans-serif}
+.btn-slate:hover{color:#f9a8d4;border-color:#9d174d}
+.btn-mega{background:linear-gradient(135deg,#db2777,#a855f7,#3b82f6);border:none;color:#fff;padding:1rem;font-size:.88rem;letter-spacing:.18em;border-radius:5px;box-shadow:0 4px 20px rgba(219,39,119,.3);font-family:Georgia,serif;font-weight:700}
+.btn-mega:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 28px rgba(219,39,119,.5)}
+.btn-mega:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.row{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+.row .btn{width:auto;flex:1;min-width:100px}
+.status{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;background:#0a0a0e;border:1px solid #23232b;border-radius:4px;font-size:.72rem;color:#7a7a88;margin-top:.5rem}
+.status.ok{background:rgba(16,185,129,.08);border-color:#065f46;color:#34d399}
+.status.err{background:rgba(239,68,68,.08);border-color:#7f1d1d;color:#f87171}
+.status.warn{background:rgba(250,204,21,.08);border-color:#a16207;color:#fcd34d}
+.status .dot{width:6px;height:6px;border-radius:50%;background:#3a3a44;flex-shrink:0}
+.status.ok .dot{background:#10b981;box-shadow:0 0 6px #10b981}
+.status.err .dot{background:#ef4444}
+.status.warn .dot{background:#facc15}
+.hint{font-size:.68rem;color:#7a7a88;margin-top:.4rem;font-family:Georgia,serif;font-style:italic;line-height:1.6}
+.hint a{color:#f472b6;text-decoration:none;border-bottom:1px dotted #9d174d}
+
+/* MODE SELECTOR */
+.mode-switch{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+.mode-opt{flex:1;min-width:130px;padding:.7rem .9rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;border-radius:5px;cursor:pointer;border:2px solid #3a3a44;background:transparent;color:#9a9aa8;text-align:center;transition:all .15s;text-transform:uppercase;font-family:Georgia,serif}
+.mode-opt:hover{border-color:#f472b6;color:#f9a8d4}
+.mode-opt.on{background:linear-gradient(135deg,rgba(244,114,182,.15),rgba(167,139,250,.1));border-color:#f472b6;color:#f9a8d4;box-shadow:0 0 0 2px rgba(244,114,182,.2)}
+
+.style-section{margin-bottom:.9rem;transition:opacity .2s}
+.style-section.hidden{display:none}
+.style-section .ss-label{font-size:.62rem;color:#9a9aa8;text-transform:uppercase;letter-spacing:.14em;font-family:ui-monospace,monospace;margin-bottom:.4rem;font-weight:600}
+.style-section .ss-label b{color:#f9a8d4;margin-right:.3rem}
+
+.drop{border:2px dashed #3a3a44;border-radius:5px;padding:1.2rem 1rem;text-align:center;cursor:pointer;position:relative;transition:all .15s;background:#0a0a0e;display:block}
+.drop:hover{border-color:#f472b6;background:rgba(244,114,182,.04)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop .icon{font-size:1.8rem;opacity:.5;margin-bottom:.3rem}
+.drop .txt{font-size:.78rem;color:#9a9aa8;font-family:Georgia,serif}
+.drop .txt strong{color:#f9a8d4}
+.drop .sub{font-size:.66rem;color:#5a5a68;margin-top:.3rem;font-family:ui-monospace,monospace}
+.preview{margin-top:.7rem;text-align:center}
+.preview img{max-width:100%;max-height:220px;border:1px solid #3a3a44;border-radius:4px;display:block;margin:0 auto}
+.preview .name{font-size:.62rem;color:#fcd34d;font-family:ui-monospace,monospace;margin-top:.3rem}
+
+.style-box{background:#0a0a0e;border:1px solid #2a2a34;border-radius:5px;padding:.75rem;margin-top:.7rem;display:none}
+.style-box.visible{display:block}
+.style-box .sb-title{font-family:Georgia,serif;font-size:.9rem;color:#fcd34d;margin-bottom:.5rem;font-style:italic}
+.style-box .sb-line{font-size:.7rem;color:#b8b8c0;margin-bottom:.35rem;font-family:ui-monospace,monospace;line-height:1.5}
+.style-box .sb-line .sb-k{color:#f9a8d4;font-weight:700;letter-spacing:.1em;font-size:.6rem}
+.palette-swatches{display:flex;gap:.3rem;flex-wrap:wrap;margin:.4rem 0 .6rem}
+.palette-swatch{width:26px;height:26px;border:1px solid #3a3a44;border-radius:3px}
+.style-summary-edit{margin-top:.6rem}
+.style-summary-edit label{display:block;font-size:.62rem;color:#9a9aa8;text-transform:uppercase;letter-spacing:.14em;font-family:ui-monospace,monospace;margin-bottom:.35rem;font-weight:600}
+.style-summary-edit textarea{min-height:130px;font-size:.72rem;line-height:1.6}
+
+.phase{background:#15151c;border:1px solid #23232b;border-left:2px solid #f472b6;border-radius:4px;padding:.75rem 1rem;margin-bottom:1rem;display:none}
+.phase.visible{display:block}
+.phase-info{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem;font-size:.72rem;font-family:ui-monospace,monospace;color:#9a9aa8}
+.progress-bar{height:6px;background:#0a0a0e;border-radius:3px;overflow:hidden;margin-top:.7rem}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,#db2777,#a855f7,#3b82f6);width:0%;transition:width .3s;border-radius:3px}
+.progress-bar .fill.done{background:linear-gradient(90deg,#10b981,#34d399)}
+.batch-info{display:flex;gap:.75rem;flex-wrap:wrap;font-size:.7rem;font-family:ui-monospace,monospace;color:#7a7a88;margin-top:.6rem;padding-top:.6rem;border-top:1px solid #23232b}
+.batch-info strong{color:#fcd34d}
+
+/* NEWS / PAINTINGS */
+.news-section{background:#15151c;border:1px solid #23232b;border-left:3px solid #f472b6;border-radius:5px;margin-bottom:1.5rem;overflow:hidden}
+.news-header{padding:1rem 1.2rem;background:linear-gradient(135deg,rgba(244,114,182,.06),rgba(167,139,250,.04));border-bottom:1px solid #23232b}
+.news-num{font-family:ui-monospace,monospace;font-size:.6rem;color:#a1a1aa;letter-spacing:.15em;font-weight:700;text-transform:uppercase}
+.news-title{font-family:Georgia,serif;font-size:1.15rem;color:#fcd34d;line-height:1.35;margin:.3rem 0 .6rem;font-style:italic}
+.news-source{font-size:.66rem;color:#7a7a88;font-family:ui-monospace,monospace}
+.news-5w{display:grid;grid-template-columns:1fr;gap:.4rem;margin-top:.8rem;padding-top:.8rem;border-top:1px solid #23232b}
+@media(min-width:640px){.news-5w{grid-template-columns:1fr 1fr}}
+@media(min-width:1024px){.news-5w{grid-template-columns:repeat(5,1fr)}}
+.w5-item{background:#0a0a0e;border:1px solid #23232b;border-radius:4px;padding:.5rem .7rem}
+.w5-item .w5-key{font-size:.55rem;text-transform:uppercase;letter-spacing:.15em;color:#f472b6;font-weight:700;font-family:ui-monospace,monospace;margin-bottom:.2rem}
+.w5-item .w5-val{font-size:.72rem;color:#d0d0d8;font-family:Georgia,serif;line-height:1.4}
+
+.paintings-grid{display:grid;grid-template-columns:1fr;gap:1rem;padding:1rem}
+@media(min-width:640px){.paintings-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1024px){.paintings-grid{grid-template-columns:1fr 1fr 1fr 1fr}}
+
+.painting{background:#0f0f14;border:1px solid #23232b;border-radius:5px;overflow:hidden;display:flex;flex-direction:column}
+.painting-img{aspect-ratio:9/16;background:#000;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.painting-img img{width:100%;height:100%;object-fit:cover;display:block}
+.painting-img .load{width:100%;height:100%;display:flex;flex-direction:column;gap:.5rem;align-items:center;justify-content:center;color:#5a5a68;font-size:.72rem;font-family:ui-monospace,monospace;position:relative;overflow:hidden}
+.painting-img .load::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(244,114,182,.1) 50%,transparent 70%);animation:shim 1.8s linear infinite}
+@keyframes shim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.painting-img .err{width:100%;height:100%;background:rgba(127,29,29,.15);display:flex;align-items:center;justify-content:center;color:#f87171;font-size:.7rem;text-align:center;padding:.6rem;flex-direction:column;gap:.4rem}
+.painting-img .err small{color:#9a9aa8;font-size:.6rem}
+.painting-scene-badge{position:absolute;top:.4rem;left:.4rem;background:rgba(219,39,119,.9);color:#fff;font-size:.55rem;font-weight:700;letter-spacing:.1em;padding:.2rem .5rem;border-radius:2px;font-family:ui-monospace,monospace;z-index:2;text-transform:uppercase}
+.painting-num{position:absolute;top:.4rem;right:.4rem;background:rgba(0,0,0,.7);color:#fcd34d;font-size:.55rem;font-family:ui-monospace,monospace;padding:.2rem .5rem;border-radius:2px;z-index:2;letter-spacing:.08em}
+
+.painting-caption{position:absolute;left:0;right:0;bottom:0;z-index:3;background:linear-gradient(to top,rgba(0,0,0,.96) 0%,rgba(0,0,0,.88) 60%,rgba(0,0,0,.45) 85%,transparent 100%);padding:1.8rem .8rem .6rem;color:#fff;font-family:Georgia,serif;pointer-events:none}
+.cap-title{font-size:.82rem;font-weight:700;color:#ffd97a;line-height:1.25;margin-bottom:.35rem;letter-spacing:.01em}
+.cap-5w{display:flex;flex-direction:column;gap:.1rem;font-family:-apple-system,sans-serif}
+.cap-line{font-size:.6rem;color:#f0e8d8;line-height:1.35;display:flex;gap:.35rem;align-items:baseline}
+.cap-line .cap-k{font-family:ui-monospace,monospace;font-size:.5rem;letter-spacing:.14em;color:#ffb26b;font-weight:700;flex-shrink:0;min-width:1.4rem}
+.cap-line .cap-v{flex:1;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+
+.painting-meta{padding:.65rem .8rem;border-top:1px solid #23232b;flex:1;display:flex;flex-direction:column;gap:.4rem}
+.painting-scene-title{font-family:Georgia,serif;font-size:.82rem;color:#fcd34d;font-style:italic;line-height:1.3}
+.painting-prompt{background:#0a0a0e;border:1px solid #23232b;border-radius:4px;padding:.5rem;position:relative;margin-top:auto}
+.painting-prompt .plabel{font-size:.55rem;text-transform:uppercase;letter-spacing:.12em;color:#7a7a88;font-family:ui-monospace,monospace;margin-bottom:.3rem}
+.painting-prompt .ptext{font-size:.6rem;color:#9a9aa8;font-family:ui-monospace,monospace;line-height:1.45;max-height:110px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;padding-right:3.5rem}
+.painting-prompt .pcopy{position:absolute;top:.4rem;right:.4rem;font-size:.55rem;padding:.15rem .4rem;border:1px solid #3a3a44;border-radius:2px;background:transparent;color:#7a7a88;cursor:pointer;font-family:-apple-system,sans-serif}
+.painting-prompt .pcopy:hover{color:#f9a8d4;border-color:#9d174d}
+.painting-video{background:#0f0f14;border:1px solid #23232b;border-left:2px solid #a855f7;border-radius:4px;padding:.5rem;position:relative;margin-top:.4rem}
+.painting-video .plabel{color:#c4b5fd}
+.painting-video .ptext{font-size:.6rem;color:#9a9aa8;font-family:ui-monospace,monospace;line-height:1.45;max-height:90px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;padding-right:3.5rem}
+.painting-video .pcopy{position:absolute;top:.4rem;right:.4rem;font-size:.55rem;padding:.15rem .4rem;border:1px solid #3a3a44;border-radius:2px;background:transparent;color:#7a7a88;cursor:pointer;font-family:-apple-system,sans-serif}
+.painting-video .pcopy:hover{color:#c4b5fd;border-color:#6d28d9}
+.popen{display:block;text-align:center;margin-top:.4rem;font-size:.58rem;text-transform:uppercase;letter-spacing:.15em;padding:.4rem;border:1px solid #3a3a44;border-radius:4px;color:#9a9aa8;text-decoration:none;font-family:-apple-system,sans-serif}
+.popen:hover{color:#f9a8d4;border-color:#9d174d}
+
+/* CONSOLE */
+.panel{position:fixed;bottom:0;left:0;right:0;z-index:40}
+.handle{background:#15151c;border-top:2px solid #db2777;padding:.55rem 1rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;gap:.5rem}
+.handle .toggle{font-family:ui-monospace,monospace;font-size:.72rem;color:#f9a8d4;letter-spacing:.1em;flex-shrink:0}
+.handle .latest{font-size:.72rem;color:#9a9aa8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:left;padding-left:.5rem}
+.handle button{font-size:.6rem;padding:.2rem .5rem;border:1px solid #3a3a44;border-radius:3px;background:transparent;color:#7a7a88;cursor:pointer;font-family:-apple-system,sans-serif}
+.handle button:hover{color:#f9a8d4;border-color:#9d174d}
+.panel-content{background:#0a0a0e;border-top:1px solid #23232b;max-height:55vh;overflow-y:auto}
+.panel-content.hidden{display:none}
+.human-log{max-height:120px;overflow-y:auto;padding:.6rem 1rem;border-bottom:1px solid #23232b;font-family:ui-monospace,monospace;font-size:.7rem}
+.human-log>div{margin-bottom:.2rem}
+.human-log .t{color:#4a4a54}
+.human-log .m{color:#c4b5fd}
+.debug-log{max-height:260px;overflow-y:auto;padding:.6rem 1rem;font-family:ui-monospace,monospace;font-size:.66rem;line-height:1.5}
+.debug-log>div{margin-bottom:.15rem;word-break:break-word}
+.debug-log .t{color:#4a4a54}
+.debug-log .info{color:#9a9aa8}
+.debug-log .ok{color:#6ee7b7}
+.debug-log .warn{color:#fcd34d}
+.debug-log .err{color:#f87171}
+.debug-log .api{color:#7dd3fc}
+.debug-log .raw{color:#f9a8d4;background:#0f0f14;padding:.3rem .5rem;border-radius:3px;display:block;margin:.2rem 0;white-space:pre-wrap;font-size:.62rem;line-height:1.45;max-height:180px;overflow-y:auto}
+
+.toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-120px);background:#15151c;border:1px solid #23232b;border-left:3px solid #fcd34d;border-radius:4px;padding:.75rem 1.2rem;font-size:.8rem;z-index:1000;opacity:0;transition:transform .3s,opacity .3s;max-width:90vw;text-align:center;font-family:Georgia,serif}
+.toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-left-color:#10b981}
+.toast.error{border-left-color:#ef4444}
+.toast.warn{border-left-color:#fcd34d}
+.status-bar{position:fixed;bottom:60px;left:0;right:0;background:#15151c;border-top:1px solid #23232b;padding:.5rem 1rem;font-size:.7rem;font-family:ui-monospace,monospace;color:#e6e6ea;display:flex;align-items:center;gap:.5rem;transform:translateY(100%);transition:transform .3s;z-index:30}
+.status-bar.visible{transform:translateY(0)}
+.status-bar .spinner{width:12px;height:12px;border:2px solid rgba(244,114,182,.2);border-top-color:#f472b6;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0f0f14}
+::-webkit-scrollbar-thumb{background:#3a3a44;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#52525b}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+<div class="kata">✦ Style Journal · Actualité en 4 tableaux ✦</div>
+<h1>Style Journal</h1>
+<p class="sub">Analyse ton style · applique-le aux actualités · 4 tableaux + 5W gravés par news</p>
+</header>
+
+<div class="banner">
+<strong>Trois modes possibles :</strong> <span class="hl-p">📷 Image</span> (analyse visuelle du style) · <span class="hl-y">✍️ Texte</span> (nom d'artiste ou description libre) · <span class="hl-v">🎨 Image + Texte</span> (le texte oriente, l'image précise). L'IA extrait un <strong>bloc de style réutilisable</strong>, tu peux l'éditer, puis elle l'applique aux <strong>actualités françaises</strong> : <strong>4 tableaux</strong> par news, avec <strong>les 5W gravés en bas de chaque image</strong>. Aucune image de référence n'est envoyée au générateur d'images.
+</div>
+
+<!-- ══════ CLÉS API ══════ -->
+<section class="card">
+<div class="card-head"><span>🔑 Clés API Agnes</span><span class="badge" id="keyBadge">0 validée</span></div>
+<div class="card-body">
+<textarea id="keysInput" placeholder="Collez vos clés API ici, une par ligne :&#10;sk-xxxxxxxxxxxx&#10;sk-yyyyyyyyyyyy" autocomplete="off" spellcheck="false"></textarea>
+<div class="row">
+<button class="btn btn-amber" id="validateBtn">🔐 Valider et enregistrer</button>
+<button class="btn btn-slate" id="clearBtn" style="width:auto;min-width:80px;">Effacer</button>
+</div>
+<div class="status" id="keyStatus"><span class="dot"></span><span id="keyStatusText">Aucune clé enregistrée</span></div>
+<div class="hint">Clé sur platform.agnes-ai.com · rotation auto · paceur 3.4s/clé · retry ×6 sur 429/502/503/504.</div>
+</div>
+</section>
+
+<!-- ══════ STYLE ══════ -->
+<section class="card">
+<div class="card-head"><span>🎨 Style — choisis ton mode</span><span class="badge" id="styleBadge">non résolu</span></div>
+<div class="card-body">
+
+<div class="mode-switch" id="modeSwitch">
+<div class="mode-opt on" data-mode="image">📷 Image seule</div>
+<div class="mode-opt" data-mode="text">✍️ Texte seul</div>
+<div class="mode-opt" data-mode="mixed">🎨 Image + Texte</div>
+</div>
+
+<!-- Image section -->
+<div class="style-section" id="secImage">
+<div class="ss-label"><b>01</b> Image de référence (analyse visuelle)</div>
+<label class="drop">
+<input type="file" accept="image/*" id="refInput">
+<div class="icon">📷</div>
+<div class="txt"><strong>Cliquez pour choisir une image</strong><br>Une œuvre, une photo, un dessin — n'importe quelle référence visuelle</div>
+<div class="sub">⚠️ Sert uniquement à extraire un bloc de style. Jamais envoyée au générateur d'images.</div>
+</label>
+<div class="preview hidden" id="refPreview">
+<img id="refPreviewImg" alt="">
+<div class="name" id="refPreviewName"></div>
+<div class="row" style="justify-content:center;">
+<button class="btn btn-slate" id="removeRefBtn" style="max-width:120px;">Retirer</button>
+</div>
+</div>
+</div>
+
+<!-- Text section -->
+<div class="style-section hidden" id="secText">
+<div class="ss-label"><b>02</b> Nom d'artiste ou description de style</div>
+<textarea id="styleTextInput" placeholder="Exemples :&#10;• Egon Schiele&#10;• Picasso période bleue&#10;• Aquarelle impressionniste, lumière dorée, tons pastel&#10;• Cyberpunk néon années 80&#10;• Vermeer, lumière de fenêtre unique&#10;• Style kawaii pastel, contours noirs épais" rows="5" spellcheck="false"></textarea>
+</div>
+
+<div class="row" style="margin-top:.8rem;">
+<button class="btn btn-amber" id="analyzeStyleBtn" style="flex:2;">🔍 Analyser / résoudre le style</button>
+<button class="btn btn-slate" id="clearStyleBtn" style="width:auto;min-width:100px;">Réinitialiser</button>
+</div>
+
+<!-- Style result -->
+<div class="style-box" id="styleBox">
+<div class="sb-title" id="sbTitle">—</div>
+<div class="sb-line" id="sbMedium"><span class="sb-k">MÉDIUM</span> <span id="sbMediumVal">—</span></div>
+<div class="sb-line" id="sbPaletteLabel"><span class="sb-k">PALETTE</span> <span id="sbPaletteLabelVal">—</span></div>
+<div class="palette-swatches" id="sbPalette"></div>
+<div class="sb-line" id="sbLighting"><span class="sb-k">LUMIÈRE</span> <span id="sbLightingVal">—</span></div>
+<div class="sb-line" id="sbTexture"><span class="sb-k">TEXTURE</span> <span id="sbTextureVal">—</span></div>
+<div class="sb-line" id="sbMood"><span class="sb-k">AMBIANCE</span> <span id="sbMoodVal">—</span></div>
+<div class="sb-line" id="sbForbidden"><span class="sb-k">À ÉVITER</span> <span id="sbForbiddenVal">—</span></div>
+<div class="style-summary-edit">
+<label>Prompt de style complet — modifiable</label>
+<textarea id="styleSummary" placeholder="L'IA va générer ici un paragraphe de style réutilisable. Tu peux le modifier avant de lancer le journal."></textarea>
+</div>
+<div class="hint">Le contenu de ce champ sera injecté dans chaque prompt image. Tu peux l'enrichir à la main.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ══════ SUJET DU JOURNAL ══════ -->
+<section class="card">
+<div class="card-head"><span>📰 Actualité du jour</span><span class="badge" id="topicBadge">actualité France</span></div>
+<div class="card-body">
+<input type="text" id="topicInput" placeholder="climat, élections, santé, économie… (vide = actualité France)" autocomplete="off">
+<div class="row" style="align-items:flex-end;">
+<div style="flex:0 0 140px;">
+<label style="display:block;font-size:.6rem;color:#7a7a88;text-transform:uppercase;letter-spacing:.12em;font-family:ui-monospace,monospace;margin-bottom:.3rem;">Nombre d'actualités</label>
+<input type="number" id="newsCount" value="3" min="1" max="8">
+</div>
+<button class="btn btn-mega" id="launchBtn" style="flex:2;" disabled>✦ Lancer le journal (4 tableaux / news)</button>
+</div>
+<div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+<div class="batch-info">
+<span>Actualités <strong id="newsProgress">0 / 0</strong></span>
+<span>Tableaux <strong id="paintProgress">0 / 0</strong></span>
+<span id="rpmInfo"></span>
+</div>
+</div>
+</section>
+
+<button class="btn btn-red" id="stopBtn">⏹ Arrêter la génération</button>
+
+<div class="phase" id="phaseBar">
+<div class="phase-info"><span id="phaseDetail">En attente</span><span id="phaseEta"></span></div>
+</div>
+
+<!-- ══════ RÉSULTATS ══════ -->
+<div id="resultsHeader" class="hidden" style="margin:1.5rem 0 .8rem;">
+<div style="font-family:Georgia,serif;font-size:1.15rem;letter-spacing:.12em;text-transform:uppercase;color:#fcd34d;">✦ Le Journal illustré</div>
+</div>
+<div id="newsGrid"></div>
+
+</div>
+
+<!-- ══════ CONSOLE ══════ -->
+<div class="panel">
+<div class="handle" id="panelHandle">
+<span class="toggle" id="panelToggle">▼ CONSOLE</span>
+<span class="latest" id="humanLatest">Prêt.</span>
+<button id="copyConsoleBtn">Copier</button>
+<button id="clearConsoleBtn">Effacer</button>
+</div>
+<div class="panel-content hidden" id="panelContent">
+<div class="human-log" id="humanLog"></div>
+<div class="debug-log" id="debugLog"></div>
+</div>
+</div>
+
+<div class="toast" id="toast"><span id="toastText">Message</span></div>
+<div class="status-bar" id="statusBar"><div class="spinner"></div><span id="statusText">Préparation…</span></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+const API_BASE = 'https://apihub.agnes-ai.com/v1';
+const NEWS_API = 'https://freenewsapi.ai/v1/search';
+const MODEL_TEXT = 'agnes-2.5-flash';
+const MODEL_IMAGE = 'agnes-image-2.1-flash';
+const IMAGE_SIZE = '1024x1792';
+const CONCURRENCY_PER_KEY = 1;
+const DELAY_PER_KEY_MS = 3400;
+const REF_MAX_SIDE = 1024;
+const KEYS_STORAGE = 'sj2_keys_v1';
+const TOPIC_STORAGE = 'sj2_topic_v1';
+const STYLE_TEXT_STORAGE = 'sj2_style_text_v1';
+const MODE_STORAGE = 'sj2_mode_v1';
+const DEBUG_MAX = 400;
+const MAX_ATTEMPTS = 6;
+const PAINTINGS_PER_NEWS = 4;
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const state = {
+  apiKeys: [],
+  mode: 'image',           // 'image' | 'text' | 'mixed'
+  refImage: null,
+  refName: null,
+  styleText: '',
+  style: null,             // { name, summary, medium, palette, palette_label, lighting, texture, mood, not_rules }
+  styleResolved: false,
+  articles: [],
+  isRunning: false,
+  isAnalyzingStyle: false,
+  stopRequested: false,
+  completed: 0,
+  total: 0,
+  newsDone: 0,
+  totalNews: 0,
+  keyIndex: 0,
+  humanLog: [],
+  debugLog: [],
+  lastRawResponse: ''
+};
+
+// ═══════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nowTime = () => new Date().toLocaleTimeString('fr-FR', { hour12: false });
+const fmtEta = s => { if (s < 0 || !isFinite(s)) return ''; return s < 60 ? Math.round(s) + 's' : Math.floor(s / 60) + 'm ' + Math.round(s % 60) + 's'; };
+const sanitize = t => String(t == null ? '' : t).replace(/[\u2018\u2019\u201B\u2032\u02BC]/g, "'").replace(/[\u201C\u201D\u201F\u2033]/g, '"').replace(/\u2013|\u2014/g, '-').replace(/\u2026/g, '...').replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\u00A0|\u202F/g, ' ');
+const trunc = (t, n) => { if (!t) return ''; const s = String(t).replace(/\s+/g, ' ').trim(); return s.length <= n ? s : s.slice(0, n - 1) + '…'; };
+const cleanTitle = raw => { if (!raw) return ''; let t = String(raw); t = t.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&').replace(/&nbsp;/g,' '); t = t.replace(/\s+-\s+[^\-]{2,60}$/,''); t = t.replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/\u2013|\u2014/g,'-').replace(/\u2026/g,'...').replace(/\s+/g,' ').trim(); return t; };
+
+function human(msg) {
+  state.humanLog.push({ t: nowTime(), m: msg });
+  if (state.humanLog.length > 80) state.humanLog.shift();
+  const el = $('humanLatest'); if (el) el.textContent = msg;
+  renderHuman();
+}
+function renderHuman() {
+  const el = $('humanLog'); if (!el) return;
+  el.innerHTML = state.humanLog.slice(-30).map(e => '<div><span class="t">' + e.t + '</span> <span class="m">' + esc(e.m) + '</span></div>').join('');
+  el.scrollTop = el.scrollHeight;
+}
+function debug(msg, level = 'info', raw) {
+  state.debugLog.push({ t: nowTime(), m: msg, c: level, raw: raw });
+  if (state.debugLog.length > DEBUG_MAX) state.debugLog.shift();
+  renderDebug();
+}
+function renderDebug() {
+  const el = $('debugLog'); if (!el) return;
+  el.innerHTML = state.debugLog.slice(-200).map(e => {
+    let html = '<div><span class="t">' + e.t + '</span> <span class="' + e.c + '">' + esc(e.m) + '</span>';
+    if (e.raw) html += '<span class="raw">' + esc(String(e.raw).slice(0, 1500)) + '</span>';
+    html += '</div>';
+    return html;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+function toast(msg, type = 'success', dur = 2500) {
+  const t = $('toast');
+  t.className = 'toast ' + type + ' visible';
+  $('toastText').textContent = msg;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => { t.className = 'toast ' + type; }, dur);
+}
+function setStatus(txt) {
+  const b = $('statusBar');
+  if (txt) { b.classList.add('visible'); $('statusText').textContent = txt; }
+  else b.classList.remove('visible');
+}
+function setPhase(detail, eta) {
+  const p = $('phaseBar');
+  p.classList.add('visible');
+  if (detail !== undefined) $('phaseDetail').textContent = detail;
+  if (eta !== undefined) $('phaseEta').textContent = eta;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════════
+const _mem = {};
+let _lsOk = false, _ssOk = false;
+try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); _lsOk = true; } catch (e) {}
+try { sessionStorage.setItem('__t', '1'); sessionStorage.removeItem('__t'); _ssOk = true; } catch (e) {}
+function storageGet(k) {
+  if (_lsOk) { try { const v = localStorage.getItem(k); if (v !== null) return v; } catch (e) {} }
+  if (_ssOk) { try { const v = sessionStorage.getItem(k); if (v !== null) return v; } catch (e) {} }
+  return Object.prototype.hasOwnProperty.call(_mem, k) ? _mem[k] : null;
+}
+function storageSet(k, v) {
+  _mem[k] = String(v);
+  if (_lsOk) { try { localStorage.setItem(k, v); } catch (e) {} }
+  if (_ssOk) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+}
+function storageDel(k) {
+  delete _mem[k];
+  if (_lsOk) { try { localStorage.removeItem(k); } catch (e) {} }
+  if (_ssOk) { try { sessionStorage.removeItem(k); } catch (e) {} }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CLÉS API
+// ═══════════════════════════════════════════════════════════════
+function isValidKey(k) { return typeof k === 'string' && k.startsWith('sk-') && k.length >= 15 && k.length <= 200; }
+async function quickPing(key) {
+  try {
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(API_BASE + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL_TEXT, messages: [{ role: 'user', content: 'ok' }], max_tokens: 1 }),
+      signal: controller.signal
+    });
+    clearTimeout(tid);
+    return res.status !== 401 && res.status !== 403;
+  } catch (e) { return null; }
+}
+async function validateAndSaveKeys() {
+  const raw = $('keysInput').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  if (raw.length === 0) { toast('Aucune clé à valider', 'error'); return; }
+  $('validateBtn').disabled = true;
+  $('validateBtn').textContent = '⏳ Validation…';
+  human('🔐 Validation de ' + raw.length + ' clé(s)…');
+  const valid = [];
+  for (let i = 0; i < raw.length; i++) {
+    const k = raw[i];
+    if (!isValidKey(k)) { debug('Clé ' + (i + 1) + ' : format invalide', 'err'); continue; }
+    const ping = await quickPing(k);
+    if (ping === false) { debug('Clé ' + (i + 1) + ' : refusée', 'err'); continue; }
+    valid.push(k);
+    debug('Clé ' + (i + 1) + ' : OK', 'ok');
+  }
+  state.apiKeys = valid;
+  storageSet(KEYS_STORAGE, JSON.stringify(valid));
+  const st = $('keyStatus');
+  if (valid.length > 0) {
+    st.className = 'status ok';
+    $('keyStatusText').textContent = valid.length + ' clé(s) enregistrée(s) · RPM ≈ ' + (valid.length * 12) + '/min';
+    $('rpmInfo').textContent = 'RPM cap ≈ ' + (valid.length * 12);
+  } else {
+    st.className = 'status err';
+    $('keyStatusText').textContent = 'Aucune clé valide';
+  }
+  $('validateBtn').disabled = false;
+  $('validateBtn').textContent = '🔐 Valider et enregistrer';
+  $('keyBadge').textContent = valid.length + ' validée' + (valid.length > 1 ? 's' : '');
+  updateLaunchBtn();
+  toast(valid.length + ' clé(s) enregistrée(s)', valid.length > 0 ? 'success' : 'error', 3000);
+}
+function getKey() {
+  if (state.apiKeys.length === 0) return '';
+  const k = state.apiKeys[state.keyIndex % state.apiKeys.length];
+  state.keyIndex++;
+  return k;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// IMAGE
+// ═══════════════════════════════════════════════════════════════
+function compressImg(dataUrl, maxSide) {
+  maxSide = maxSide || REF_MAX_SIDE;
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      let { width: w, height: h } = img;
+      const s = Math.min(1, maxSide / Math.max(w, h));
+      w = Math.max(1, Math.round(w * s)); h = Math.max(1, Math.round(h * s));
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const x = c.getContext('2d');
+      x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+      x.drawImage(img, 0, 0, w, h);
+      let url = c.toDataURL('image/jpeg', 0.88);
+      let q = 0.88;
+      while (url.length > 1.4 * 1024 * 1024 && q > 0.5) { q -= 0.1; url = c.toDataURL('image/jpeg', q); }
+      res(url);
+    };
+    img.onerror = () => res(dataUrl);
+    img.src = dataUrl;
+  });
+}
+async function handleRefFile(f) {
+  if (!f) return;
+  if (!f.type.startsWith('image/')) { toast('Fichier non image', 'error'); return; }
+  if (f.size > 30 * 1024 * 1024) { toast('Image trop lourde (>30 Mo)', 'error'); return; }
+  setStatus('Chargement…');
+  try {
+    const dataUrl = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = e => res(e.target.result);
+      r.onerror = rej;
+      r.readAsDataURL(f);
+    });
+    const compressed = await compressImg(dataUrl);
+    state.refImage = compressed;
+    state.refName = f.name;
+    state.styleResolved = false;
+    refreshRefPanel();
+    human('📷 Image chargée : ' + f.name);
+    toast('Image chargée', 'success');
+  } catch (e) {
+    debug('Erreur image : ' + e.message, 'err');
+    toast('Chargement impossible', 'error');
+  }
+  setStatus(null);
+}
+function refreshRefPanel() {
+  const prev = $('refPreview'), img = $('refPreviewImg'), name = $('refPreviewName');
+  const badge = $('styleBadge');
+  const has = !!state.refImage;
+  if (has) { img.src = state.refImage; name.textContent = state.refName || ''; prev.classList.remove('hidden'); }
+  else { img.removeAttribute('src'); prev.classList.add('hidden'); }
+  badge.textContent = state.styleResolved ? 'style résolu ✓' : 'non résolu';
+  updateLaunchBtn();
+}
+function removeRef() {
+  state.refImage = null; state.refName = null; state.styleResolved = false;
+  refreshRefPanel();
+  $('refInput').value = '';
+  toast('Image retirée', 'warn');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODE
+// ═══════════════════════════════════════════════════════════════
+function setMode(mode) {
+  state.mode = mode;
+  document.querySelectorAll('.mode-opt').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  const showImage = (mode === 'image' || mode === 'mixed');
+  const showText = (mode === 'text' || mode === 'mixed');
+  $('secImage').classList.toggle('hidden', !showImage);
+  $('secText').classList.toggle('hidden', !showText);
+  storageSet(MODE_STORAGE, mode);
+  state.styleResolved = false;
+  refreshRefPanel();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// JSON ROBUSTE
+// ═══════════════════════════════════════════════════════════════
+function extractBalanced(text, o, c) {
+  const start = text.indexOf(o);
+  if (start < 0) return null;
+  let depth = 0, inStr = false, escNext = false;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (escNext) { escNext = false; continue; }
+    if (ch === '\\') { escNext = true; continue; }
+    if (ch === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (ch === o) depth++;
+    else if (ch === c) { depth--; if (depth === 0) return text.slice(start, i + 1); }
+  }
+  return null;
+}
+function repairJson(text) {
+  if (!text) return null;
+  let c = String(text).trim();
+  const fm = c.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (fm) c = fm[1].trim();
+  const fb = c.indexOf('{'); if (fb < 0) return null;
+  c = c.slice(fb);
+  const lb = c.lastIndexOf('}'); if (lb > 0) c = c.slice(0, lb + 1);
+  let out = '', inS = false, esc2 = false;
+  for (let i = 0; i < c.length; i++) {
+    const ch = c[i];
+    if (esc2) { if ('"\\/bfnrtu'.includes(ch)) out += '\\' + ch; else out += ch; esc2 = false; continue; }
+    if (ch === '\\') { esc2 = true; continue; }
+    if (ch === '"') { inS = !inS; out += ch; continue; }
+    if (inS) {
+      if (ch === '\n') out += '\\n';
+      else if (ch === '\r') out += '\\r';
+      else if (ch === '\t') out += '\\t';
+      else if (ch.charCodeAt(0) < 32) out += '\\u' + ch.charCodeAt(0).toString(16).padStart(4, '0');
+      else out += ch;
+      continue;
+    }
+    out += ch;
+  }
+  if (esc2) out += '\\';
+  if (inS) out += '"';
+  return out.replace(/,\s*([}\]])/g, '$1');
+}
+function tryParseJson(text) {
+  if (!text) return null;
+  const raw = String(text);
+  const objText = extractBalanced(raw, '{', '}');
+  if (objText) {
+    try { return JSON.parse(objText); } catch (e) {}
+    const rep = repairJson(objText);
+    if (rep) { try { return JSON.parse(rep); } catch (e) {} }
+  }
+  const rep2 = repairJson(raw);
+  if (rep2) { try { return JSON.parse(rep2); } catch (e) {} }
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════════════════════
+async function apiChat(system, user, label, maxTokens, temp) {
+  const key = getKey();
+  if (!key) throw new Error('Aucune clé API');
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 90000);
+  try {
+    const res = await fetch(API_BASE + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: MODEL_TEXT,
+        messages: [
+          { role: 'system', content: sanitize(system) },
+          { role: 'user', content: sanitize(user) }
+        ],
+        temperature: temp !== undefined ? temp : 0.5,
+        max_tokens: maxTokens || 2600
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(tid);
+    debug('CHAT ' + label + ' HTTP ' + res.status, res.ok ? 'ok' : 'err');
+    if (!res.ok) { const t = await res.text(); throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 120)); }
+    const d = await res.json();
+    const ch = d.choices && d.choices[0];
+    return (ch && ch.message && (ch.message.content || ch.message.reasoning_content)) || null;
+  } catch (e) {
+    clearTimeout(tid);
+    throw e;
+  }
+}
+async function apiVision(system, user, imageUrl, label, maxTokens, temp) {
+  const key = getKey();
+  if (!key) throw new Error('Aucune clé API');
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 90000);
+  try {
+    const res = await fetch(API_BASE + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: MODEL_TEXT,
+        messages: [
+          { role: 'system', content: sanitize(system) },
+          { role: 'user', content: [
+            { type: 'text', text: sanitize(user) },
+            { type: 'image_url', image_url: { url: imageUrl } }
+          ] }
+        ],
+        temperature: temp !== undefined ? temp : 0.35,
+        max_tokens: maxTokens || 2600
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(tid);
+    debug('VISION ' + label + ' HTTP ' + res.status, res.ok ? 'ok' : 'err');
+    if (!res.ok) { const t = await res.text(); throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 120)); }
+    const d = await res.json();
+    const ch = d.choices && d.choices[0];
+    return (ch && ch.message && (ch.message.content || ch.message.reasoning_content)) || null;
+  } catch (e) {
+    clearTimeout(tid);
+    throw e;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API IMAGE — texte-vers-image pur
+// ═══════════════════════════════════════════════════════════════
+async function apiImage(prompt) {
+  const key = getKey();
+  if (!key) throw new Error('Aucune clé API');
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    if (state.stopRequested) throw new Error('Arrêt');
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 90000);
+    try {
+      const body = {
+        model: MODEL_IMAGE,
+        prompt: sanitize(prompt),
+        n: 1,
+        size: IMAGE_SIZE,
+        extra_body: { response_format: 'url' }
+      };
+      const res = await fetch(API_BASE + '/images/generations', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
+      clearTimeout(tid);
+      debug('IMG HTTP ' + res.status + ' · essai ' + (attempt + 1) + '/' + MAX_ATTEMPTS, res.ok ? 'ok' : 'warn');
+      if (res.status === 429 || res.status === 502 || res.status === 503 || res.status === 504) {
+        const wait = Math.min(60, 6 + attempt * 6);
+        await sleep(wait * 1000);
+        continue;
+      }
+      if (!res.ok) {
+        const t = await res.text().catch(() => '');
+        if (attempt < MAX_ATTEMPTS - 1 && res.status < 500 && res.status !== 400) {
+          await sleep(3000 + attempt * 2000);
+          continue;
+        }
+        throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 100));
+      }
+      const d = await res.json();
+      const item = d.data && d.data[0];
+      if (item && item.url) return item.url;
+      if (item && item.b64_json) return 'data:image/png;base64,' + item.b64_json;
+      throw new Error('Réponse sans image');
+    } catch (e) {
+      clearTimeout(tid);
+      if (e.message === 'Arrêt' || state.stopRequested) throw new Error('Arrêt');
+      const isAbort = e.name === 'AbortError';
+      if (attempt < MAX_ATTEMPTS - 1) { await sleep(isAbort ? 5000 : 3000); continue; }
+      throw new Error(isAbort ? 'Timeout' : e.message);
+    }
+  }
+  throw new Error('Échec après ' + MAX_ATTEMPTS + ' tentatives');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STYLE — RÉSOLUTION (image / texte / mixed)
+// ═══════════════════════════════════════════════════════════════
+const SYS_STYLE = [
+  'You are a world-class art director specialised in extracting REUSABLE STYLE PROMPTS for text-to-image AI.',
+  '',
+  'You produce ONE JSON object. No markdown. No code fences. No commentary.',
+  '',
+  'GOAL: extract a universal style block that any text-to-image AI can use to render ANY scene (portraits, streets, buildings, news events) in the SAME VISUAL LANGUAGE as the reference.',
+  '',
+  'FIELDS:',
+  '- name: short poetic name (2-5 words, French or English).',
+  '- summary: 130-200 words in ENGLISH. A complete reusable style prompt describing medium, technique, linework, brushwork, color behavior, composition, atmosphere.',
+  '- medium: 5-15 words in ENGLISH (e.g. "oil on canvas, thick impasto", "analog 35mm Kodak Portra 400 photograph", "hand-painted watercolor and gouache on aged paper").',
+  '- palette: 5-7 dominant hex colors as strings.',
+  '- palette_label: 3-8 words in FRENCH describing the palette.',
+  '- lighting: 6-15 words in ENGLISH.',
+  '- texture: 6-15 words in ENGLISH.',
+  '- mood: 3-6 adjectives in ENGLISH.',
+  '- not_rules: array of 4-8 SHORT english sentences describing what must be AVOIDED (e.g. "photorealistic 3D render", "watermark", "digital airbrush") so the images stay faithful to the style.',
+  '',
+  'CONSTRAINTS:',
+  '- The style must apply to scenes with people AND scenes without people AND close-ups of objects.',
+  '- Never invent a specific artist name unless the reference is clearly recognisable.',
+  '- Do not describe a specific scene, only the visual language.'
+].join('\n');
+
+const STYLE_SCHEMA_EXAMPLE = {
+  name: "Vienna Ink & Gouache",
+  summary: "Hand-painted watercolor and gouache artwork on aged paper. Raw black ink contour lines define angular, elongated figures with visible bony anatomy. Colors are applied in flat, uneven washes with intentional bleeding. Palette is muted: dusty ochre, brown-red shadows, pale flesh, one carmine accent. Composition favours vertical 9:16 framing, single clear subject, empty or sparsely suggested backgrounds. Atmosphere is intimate and unsettling.",
+  medium: "watercolor and gouache with raw ink linework on aged paper",
+  palette: ["#e8d8b8", "#a8744a", "#7a3820", "#c44536", "#2a1a10"],
+  palette_label: "ocre poussière, ombre brun-rouge, chair pâle, accent carmin",
+  lighting: "flat ambient light with one warm source, deep dramatic shadows",
+  texture: "visible paper grain, watercolor bleeding, ink contour lines",
+  mood: "intimate, unsettling, sober, human",
+  not_rules: ["photorealistic 3D render", "digital airbrush or clean gradient", "watermark or signature", "modern logo or brand", "cartoon or manga simplification"]
+};
+
+function buildStyleUserImage() {
+  return [
+    'Analyse this reference image and extract its STYLE as a reusable block for text-to-image AI.',
+    'It is not about the subject — it is about the VISUAL LANGUAGE (medium, linework, color, light, texture, mood).',
+    '',
+    'Output ONE JSON object with EXACTLY these keys:',
+    'name, summary, medium, palette, palette_label, lighting, texture, mood, not_rules.',
+    '',
+    'FORMAT EXAMPLE (only to show the shape, do NOT copy the values):',
+    JSON.stringify(STYLE_SCHEMA_EXAMPLE, null, 2),
+    '',
+    'NOW OUTPUT THE REAL JSON. Only the JSON object. Start with { and end with }.'
+  ].join('\n');
+}
+function buildStyleUserText(textStyle) {
+  return [
+    'Style to expand: "' + textStyle.slice(0, 400) + '"',
+    '',
+    'This may be an artist name, an art movement, a material, or a loose description.',
+    'Expand it into a rich, reusable style block for text-to-image AI.',
+    'If the style is an artist name, capture their visual signatures without copying any specific existing painting.',
+    '',
+    'Output ONE JSON object with EXACTLY these keys:',
+    'name, summary, medium, palette, palette_label, lighting, texture, mood, not_rules.',
+    '',
+    'FORMAT EXAMPLE (only to show the shape, do NOT copy the values):',
+    JSON.stringify(STYLE_SCHEMA_EXAMPLE, null, 2),
+    '',
+    'NOW OUTPUT THE REAL JSON. Only the JSON object.'
+  ].join('\n');
+}
+function buildStyleUserMixed(imageHas, textStyle) {
+  return [
+    'You receive an image AND a textual direction.',
+    'Merge them into a SINGLE style block for text-to-image AI.',
+    'The image provides the specific visual vocabulary (medium, linework, palette).',
+    'The text takes precedence for orientation (e.g. if the text says "more carmine red" or "Picasso blue period", adjust accordingly).',
+    '',
+    'TEXTUAL DIRECTION: "' + textStyle.slice(0, 400) + '"',
+    '',
+    'Output ONE JSON object with EXACTLY these keys:',
+    'name, summary, medium, palette, palette_label, lighting, texture, mood, not_rules.',
+    '',
+    'FORMAT EXAMPLE (only to show the shape, do NOT copy the values):',
+    JSON.stringify(STYLE_SCHEMA_EXAMPLE, null, 2),
+    '',
+    'NOW OUTPUT THE REAL JSON. Only the JSON object.'
+  ].join('\n');
+}
+
+function normalizeStyle(p) {
+  return {
+    name: String(p.name || '').trim().slice(0, 60),
+    summary: String(p.summary || '').trim(),
+    medium: String(p.medium || '').trim().slice(0, 200),
+    palette: Array.isArray(p.palette) ? p.palette.filter(h => /^#[0-9a-fA-F]{3,8}$/.test(h)).slice(0, 8) : [],
+    palette_label: String(p.palette_label || '').trim().slice(0, 120),
+    lighting: String(p.lighting || '').trim().slice(0, 200),
+    texture: String(p.texture || '').trim().slice(0, 200),
+    mood: String(p.mood || '').trim().slice(0, 120),
+    not_rules: Array.isArray(p.not_rules) ? p.not_rules.map(x => String(x).trim()).filter(Boolean).slice(0, 10) : []
+  };
+}
+
+async function resolveStyle() {
+  if (state.isAnalyzingStyle) return;
+  if (state.apiKeys.length === 0) { toast('Ajoutez une clé API', 'error'); return; }
+
+  const hasImage = !!state.refImage;
+  const hasText = !!(state.styleText || '').trim();
+  const mode = state.mode;
+
+  if (mode === 'image' && !hasImage) { toast('Chargez une image de référence', 'error'); return; }
+  if (mode === 'text' && !hasText) { toast('Écrivez un nom d\'artiste ou un style', 'error'); return; }
+  if (mode === 'mixed' && (!hasImage || !hasText)) { toast('Charger une image ET écrire un texte', 'error'); return; }
+
+  state.isAnalyzingStyle = true;
+  $('analyzeStyleBtn').disabled = true;
+  $('analyzeStyleBtn').textContent = '⏳ Résolution du style…';
+  setStatus('Résolution du style…');
+  human('🎨 Résolution du style (' + mode + ')…');
+
+  try {
+    let raw;
+    if (mode === 'image') {
+      raw = await apiVision(SYS_STYLE, buildStyleUserImage(), state.refImage, 'Style image', 2600, 0.35);
+    } else if (mode === 'text') {
+      raw = await apiChat(SYS_STYLE, buildStyleUserText(state.styleText), 'Style text', 2600, 0.55);
+    } else {
+      raw = await apiVision(SYS_STYLE, buildStyleUserMixed(true, state.styleText), state.refImage, 'Style mixed', 2600, 0.4);
+    }
+    state.lastRawResponse = raw || '';
+    if (!raw) throw new Error('Réponse vide');
+    const p = tryParseJson(raw);
+    if (!p) { debug('Parsing JSON style impossible', 'err', raw.slice(0, 800)); throw new Error('Réponse invalide — JSON non détecté'); }
+    state.style = normalizeStyle(p);
+    if (!state.style.summary || state.style.summary.length < 40) throw new Error('Summary de style trop court');
+    state.styleResolved = true;
+    renderStyleBox();
+    refreshRefPanel();
+    human('✅ Style résolu · « ' + (state.style.name || 'Sans nom') + ' »');
+    toast('Style résolu — tu peux l\'éditer puis lancer', 'success', 3000);
+  } catch (e) {
+    debug('Résolution style échouée : ' + e.message, 'err', state.lastRawResponse ? state.lastRawResponse.slice(0, 800) : '');
+    human('❌ Résolution du style impossible');
+    toast('Résolution impossible : ' + String(e.message).slice(0, 80), 'error', 4000);
+  } finally {
+    state.isAnalyzingStyle = false;
+    $('analyzeStyleBtn').disabled = false;
+    $('analyzeStyleBtn').textContent = '🔍 Analyser / résoudre le style';
+    setStatus(null);
+    updateLaunchBtn();
+  }
+}
+
+function renderStyleBox() {
+  const box = $('styleBox');
+  const s = state.style;
+  if (!s) { box.classList.remove('visible'); return; }
+  $('sbTitle').textContent = '🎨 ' + (s.name || 'Style sans nom');
+  $('sbMediumVal').textContent = s.medium || '—';
+  $('sbPaletteLabelVal').textContent = s.palette_label || '—';
+  $('sbLightingVal').textContent = s.lighting || '—';
+  $('sbTextureVal').textContent = s.texture || '—';
+  $('sbMoodVal').textContent = s.mood || '—';
+  $('sbForbiddenVal').textContent = (s.not_rules && s.not_rules.length) ? s.not_rules.join(' · ') : '—';
+  $('sbPalette').innerHTML = (s.palette || []).map(c => '<span class="palette-swatch" style="background:' + esc(c) + '" title="' + esc(c) + '"></span>').join('');
+  $('styleSummary').value = s.summary || '';
+  box.classList.add('visible');
+}
+
+function clearStyle() {
+  state.style = null;
+  state.styleResolved = false;
+  $('styleBox').classList.remove('visible');
+  $('styleSummary').value = '';
+  refreshRefPanel();
+  toast('Style réinitialisé', 'warn');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STYLE — BLOCS INJECTÉS
+// ═══════════════════════════════════════════════════════════════
+function currentStyle() {
+  if (!state.style) return null;
+  // Le résumé peut avoir été édité par l'utilisateur
+  const summaryField = $('styleSummary');
+  if (summaryField && summaryField.value) {
+    state.style.summary = summaryField.value.trim();
+  }
+  return state.style;
+}
+function buildStyleBlock() {
+  const s = currentStyle();
+  if (!s) return 'ARTISTIC STYLE: cinematic artwork with a clear unified visual language.';
+  const parts = [];
+  parts.push('════════ ARTISTIC STYLE — FOLLOW EXACTLY ════════');
+  if (s.name) parts.push('STYLE NAME: ' + s.name);
+  if (s.medium) parts.push('MEDIUM: ' + s.medium);
+  if (s.palette && s.palette.length) parts.push('PALETTE (hex): ' + s.palette.join(', '));
+  if (s.palette_label) parts.push('PALETTE (label): ' + s.palette_label);
+  if (s.lighting) parts.push('LIGHTING: ' + s.lighting);
+  if (s.texture) parts.push('TEXTURE: ' + s.texture);
+  if (s.mood) parts.push('MOOD: ' + s.mood);
+  if (s.summary) parts.push('SUMMARY: ' + s.summary);
+  parts.push('══════════════════════════════════════════════════');
+  return parts.join('\n');
+}
+function buildForbiddenBlock() {
+  const s = currentStyle();
+  const base = ['text inside the image', 'watermark', 'signature', 'logo', 'brand', 'caption'];
+  const extra = (s && s.not_rules && s.not_rules.length) ? s.not_rules : [];
+  return 'FORBIDDEN: ' + [...base, ...extra].join(', ') + '.';
+}
+function buildImagePrompt(sceneDescription) {
+  return [
+    buildStyleBlock(),
+    '',
+    '════════ SCENE TO RENDER ════════',
+    sceneDescription,
+    '══════════════════════════════════',
+    '',
+    '════════ COMPOSITION ════════',
+    '- Vertical 9:16 portrait orientation, cinematic framing.',
+    '- Single clear subject or group, centered.',
+    '- The scene must be READABLE at first glance: the viewer understands the news event.',
+    '- In the visual language of the style described above, no matter whether the scene is human, architectural, or symbolic.',
+    '',
+    '════════ ABSOLUTE RULES ════════',
+    buildForbiddenBlock(),
+    '- Dignified, sober, human — no caricature, no mockery.',
+    '- The image must be a finished artwork, not a sketch or a study.'
+  ].join('\n');
+}
+function buildVideoPrompt(scene) {
+  const s = currentStyle();
+  const styleName = s ? (s.name || 'the chosen style') : 'the chosen style';
+  return 'Animated artwork in the visual language of ' + styleName + '. Slow subtle camera push on: "' + trunc(scene.description_en, 120) + '". Gentle ambient motion of the figures, breathing rhythm, quiet meditative atmosphere. Preserve the palette, texture and mood of the still image. Duration 5 seconds. Vertical 9:16. No music, no text.';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NEWS
+// ═══════════════════════════════════════════════════════════════
+async function fetchNews(q, size) {
+  const p = new URLSearchParams();
+  p.set('q', q);
+  p.set('lang', 'fr');
+  p.set('country', 'FR');
+  p.set('date', '7d');
+  p.set('sort', 'relevance');
+  p.set('size', String(size));
+  const url = NEWS_API + '?' + p;
+  const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const d = await res.json();
+  return (d.results || []).map(it => ({
+    title: cleanTitle(it.title || ''),
+    description: cleanTitle(it.description || ''),
+    body: it.full_text ? String(it.full_text).replace(/\s+/g, ' ') : '',
+    source: it.sitename || it.host || '',
+    pubDate: it.published_at || '',
+    link: it.url || ''
+  })).filter(a => a.title && a.title.length > 10);
+}
+async function collectNews(topic) {
+  human('📰 Collecte des actualités…');
+  const all = [], seen = new Set();
+  const push = r => r.forEach(a => { const k = a.link || a.title; if (!seen.has(k)) { seen.add(k); all.push(a); } });
+  try { push(await fetchNews(topic, 30)); debug('NEWS 1 · ' + all.length + ' articles', 'ok'); } catch (e) { debug('NEWS 1 échec : ' + e.message, 'warn'); }
+  if (all.length < 12) {
+    try { push(await fetchNews(topic + ' actualité', 20)); debug('NEWS 2 · ' + all.length + ' au total', 'ok'); } catch (e) { debug('NEWS 2 échec : ' + e.message, 'warn'); }
+  }
+  all.sort((a, b) => (b.pubDate ? new Date(b.pubDate) : 0) - (a.pubDate ? new Date(a.pubDate) : 0));
+  human('📰 ' + all.length + ' article(s) collecté(s)');
+  return all;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LLM — ANALYSE 5W + 4 SCÈNES DANS LE STYLE CHOISI
+// ═══════════════════════════════════════════════════════════════
+function buildAnalyzerSystem() {
+  const s = currentStyle();
+  const styleName = s ? (s.name || 'the chosen style') : 'the chosen style';
+  const summary = s ? (s.summary || '') : '';
+  return [
+    'Tu es à la fois un analyste éditorial (JT français) ET un peintre qui maîtrise un style visuel précis.',
+    'Tu reçois UN article d\'actualité française et tu produis STRICTEMENT un seul objet JSON valide, sans markdown, sans code fence.',
+    '',
+    'STYLE VISUEL À RESPECTER : ' + styleName,
+    'STYLE SUMMARY (english) : ' + summary.slice(0, 500),
+    '',
+    'RÈGLES :',
+    '- Les 5W sont en FRANÇAIS, factuels et neutres. N\'invente aucun fait.',
+    '- Les descriptions de scènes sont en ANGLAIS, 45-75 mots chacune.',
+    '- Chaque scène décrit une composition verticale 9:16 qui respecte le STYLE ci-dessus.',
+    '- Les 4 scènes doivent montrer 4 angles DIFFÉRENTS : (1) la scène principale, (2) les personnes concernées, (3) le lieu, (4) la conséquence ou l\'émotion.',
+    '- Reste sobre et humain, pas de caricature.',
+    '',
+    'FORMAT DE SORTIE :',
+    '{',
+    '  "titre_court": "titre français reformulé, max 10 mots",',
+    '  "qui": "5-10 mots",',
+    '  "quoi": "5-12 mots",',
+    '  "quand": "3-8 mots",',
+    '  "ou": "3-10 mots",',
+    '  "pourquoi": "6-14 mots",',
+    '  "scenes": [',
+    '    { "titre": "titre français court", "description_en": "english scene description 45-75 words in the chosen style" },',
+    '    { "titre": "...", "description_en": "..." },',
+    '    { "titre": "...", "description_en": "..." },',
+    '    { "titre": "...", "description_en": "..." }',
+    '  ]',
+    '}'
+  ].join('\n');
+}
+
+async function analyzeNews(article) {
+  const excerpt = (article.body || article.description || '').slice(0, 800);
+  const usr = [
+    'ARTICLE À ANALYSER :',
+    'Titre : ' + article.title,
+    'Source : ' + article.source,
+    'Date : ' + (article.pubDate || 'inconnue'),
+    'Extrait : ' + excerpt,
+    '',
+    'Produis maintenant l\'objet JSON demandé. Rien d\'autre.'
+  ].join('\n');
+  const raw = await apiChat(buildAnalyzerSystem(), usr, 'Analyse news', 2600, 0.55);
+  state.lastRawResponse = raw || '';
+  if (!raw) throw new Error('Réponse vide du modèle');
+  const p = tryParseJson(raw);
+  if (!p) { debug('Parsing JSON analyse news impossible', 'err', raw.slice(0, 800)); throw new Error('Analyse news : JSON invalide'); }
+  const scenes = Array.isArray(p.scenes) ? p.scenes.slice(0, PAINTINGS_PER_NEWS).map((s, i) => ({
+    titre: String(s.titre || ('Tableau ' + (i + 1))).trim().slice(0, 60),
+    description_en: String(s.description_en || s.description || s.prompt || '').trim()
+  })).filter(s => s.description_en.length > 30) : [];
+  while (scenes.length < PAINTINGS_PER_NEWS) {
+    scenes.push({
+      titre: 'Tableau ' + (scenes.length + 1),
+      description_en: 'A vertical hand-painted scene evoking ' + (p.titre_court || article.title) + ', rendered in the chosen visual style, single clear subject, empty or subtle background.'
+    });
+  }
+  return {
+    titre_court: String(p.titre_court || article.title).trim().slice(0, 120),
+    qui: String(p.qui || '').trim().slice(0, 120),
+    quoi: String(p.quoi || '').trim().slice(0, 160),
+    quand: String(p.quand || '').trim().slice(0, 80),
+    ou: String(p.ou || '').trim().slice(0, 120),
+    pourquoi: String(p.pourquoi || '').trim().slice(0, 200),
+    scenes
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════
+function paintingCardHTML(painting, idx) {
+  const fiveW = painting.parent5W || {};
+  let imgHtml;
+  if (painting.url && painting.url !== 'error') imgHtml = '<img src="' + painting.url + '" loading="lazy" alt="">';
+  else if (painting.status === 'error' || painting.url === 'error') imgHtml = '<div class="err">✕ Échec<br><small>' + esc(trunc(painting.error || '', 60)) + '</small></div>';
+  else imgHtml = '<div class="load"><span style="font-size:1.4rem">🎨</span>Peinture…</div>';
+
+  const captionHTML = '<div class="painting-caption">' +
+    '<div class="cap-title">' + esc(fiveW.titre_court || '') + '</div>' +
+    '<div class="cap-5w">' +
+    (fiveW.qui ? '<div class="cap-line"><span class="cap-k">QUI</span><span class="cap-v">' + esc(fiveW.qui) + '</span></div>' : '') +
+    (fiveW.quoi ? '<div class="cap-line"><span class="cap-k">QUOI</span><span class="cap-v">' + esc(fiveW.quoi) + '</span></div>' : '') +
+    (fiveW.quand ? '<div class="cap-line"><span class="cap-k">QUAND</span><span class="cap-v">' + esc(fiveW.quand) + '</span></div>' : '') +
+    (fiveW.ou ? '<div class="cap-line"><span class="cap-k">OÙ</span><span class="cap-v">' + esc(fiveW.ou) + '</span></div>' : '') +
+    (fiveW.pourquoi ? '<div class="cap-line"><span class="cap-k">PKOI</span><span class="cap-v">' + esc(fiveW.pourquoi) + '</span></div>' : '') +
+    '</div>' +
+    '</div>';
+
+  const promptText = painting.fullPrompt || buildImagePrompt(painting.description_en);
+  const videoText = painting.videoPrompt || buildVideoPrompt(painting);
+
+  return '<div class="painting" data-uid="' + esc(painting.uid) + '">' +
+    '<div class="painting-img">' +
+    imgHtml +
+    '<span class="painting-scene-badge">' + esc(painting.titre || ('Tableau ' + (idx + 1))) + '</span>' +
+    '<span class="painting-num">' + (idx + 1) + '/' + PAINTINGS_PER_NEWS + '</span>' +
+    captionHTML +
+    '</div>' +
+    '<div class="painting-meta">' +
+    '<div class="painting-scene-title">' + esc(painting.titre || ('Tableau ' + (idx + 1))) + '</div>' +
+    '<div class="painting-prompt">' +
+    '<div class="plabel">📸 Prompt image</div>' +
+    '<button class="pcopy" data-copy="' + esc(promptText) + '">Copier</button>' +
+    '<div class="ptext">' + esc(promptText) + '</div>' +
+    '</div>' +
+    '<div class="painting-video">' +
+    '<div class="plabel">🎬 Prompt vidéo</div>' +
+    '<button class="pcopy" data-copy="' + esc(videoText) + '">Copier</button>' +
+    '<div class="ptext">' + esc(videoText) + '</div>' +
+    '</div>' +
+    (painting.url && painting.url !== 'error' ? '<a class="popen" href="' + painting.url + '" target="_blank" rel="noopener">Ouvrir l\'image</a>' : '') +
+    '</div>' +
+    '</div>';
+}
+
+function newsSectionHTML(article, idx) {
+  const s = article.fiveW;
+  const source = article.news.source ? (' · ' + article.news.source) : '';
+  const date = article.news.pubDate ? new Date(article.news.pubDate).toLocaleDateString('fr-FR') : '';
+  return '<div class="news-section" data-news-idx="' + idx + '">' +
+    '<div class="news-header">' +
+    '<div class="news-num">ACTUALITÉ #' + (idx + 1) + '</div>' +
+    '<div class="news-title">' + esc(s.titre_court) + '</div>' +
+    '<div class="news-source">' + esc(article.news.title) + source + (date ? ' · ' + date : '') + '</div>' +
+    '<div class="news-5w">' +
+    (s.qui ? '<div class="w5-item"><div class="w5-key">Qui</div><div class="w5-val">' + esc(s.qui) + '</div></div>' : '') +
+    (s.quoi ? '<div class="w5-item"><div class="w5-key">Quoi</div><div class="w5-val">' + esc(s.quoi) + '</div></div>' : '') +
+    (s.quand ? '<div class="w5-item"><div class="w5-key">Quand</div><div class="w5-val">' + esc(s.quand) + '</div></div>' : '') +
+    (s.ou ? '<div class="w5-item"><div class="w5-key">Où</div><div class="w5-val">' + esc(s.ou) + '</div></div>' : '') +
+    (s.pourquoi ? '<div class="w5-item"><div class="w5-key">Pourquoi</div><div class="w5-val">' + esc(s.pourquoi) + '</div></div>' : '') +
+    '</div>' +
+    '</div>' +
+    '<div class="paintings-grid">' +
+    article.scenes.map((p, i) => paintingCardHTML(p, i)).join('') +
+    '</div>' +
+    '</div>';
+}
+
+function renderAll() {
+  $('newsGrid').innerHTML = state.articles.map((a, i) => newsSectionHTML(a, i)).join('');
+  attachCopyHandlers();
+}
+
+function attachCopyHandlers() {
+  document.querySelectorAll('[data-copy]').forEach(b => {
+    if (b._wired) return;
+    b._wired = true;
+    b.onclick = (e) => {
+      e.stopPropagation();
+      const ta = document.createElement('textarea');
+      ta.value = b.dataset.copy;
+      ta.style.position = 'fixed'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (er) {}
+      document.body.removeChild(ta);
+      toast(ok ? 'Copié' : 'Copie impossible', ok ? 'success' : 'error', 1500);
+    };
+  });
+}
+
+function updatePaintingCard(painting) {
+  const old = document.querySelector('.painting[data-uid="' + painting.uid + '"]');
+  if (!old) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = paintingCardHTML(painting, painting.parentIndex);
+  old.replaceWith(tmp.firstChild);
+  attachCopyHandlers();
+}
+
+function updateProgressBar() {
+  const total = state.total;
+  const done = state.completed;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const fill = $('progressFill');
+  fill.style.width = pct + '%';
+  fill.classList.toggle('done', pct >= 100 && total > 0);
+  $('newsProgress').textContent = state.newsDone + ' / ' + state.totalNews;
+  $('paintProgress').textContent = done + ' / ' + total;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PIPELINE
+// ═══════════════════════════════════════════════════════════════
+function updateLaunchBtn() {
+  const btn = $('launchBtn');
+  const canRun = state.apiKeys.length > 0 && state.styleResolved && !state.isRunning;
+  btn.disabled = !canRun;
+  if (state.isRunning) btn.textContent = 'Génération en cours…';
+  else if (state.apiKeys.length === 0) btn.textContent = 'Ajoutez une clé API';
+  else if (!state.styleResolved) btn.textContent = 'Résolvez d\'abord le style';
+  else btn.textContent = '✦ Lancer le journal (4 tableaux / news)';
+}
+
+async function runJournal() {
+  if (state.isRunning) return;
+  if (!state.styleResolved) { toast('Résolvez d\'abord le style', 'error'); return; }
+  if (state.apiKeys.length === 0) { toast('Ajoutez une clé API', 'error'); return; }
+
+  const topic = ($('topicInput').value || '').trim() || 'actualité France';
+  storageSet(TOPIC_STORAGE, topic);
+  $('topicBadge').textContent = topic;
+
+  const nNews = Math.max(1, Math.min(8, parseInt($('newsCount').value || '3', 10) || 3));
+
+  state.isRunning = true;
+  state.stopRequested = false;
+  state.articles = [];
+  state.completed = 0;
+  state.newsDone = 0;
+  state.total = 0;
+  state.totalNews = nNews;
+  state.keyIndex = 0;
+  $('newsGrid').innerHTML = '';
+  $('stopBtn').classList.add('visible');
+  $('progressFill').style.width = '0%';
+  updateProgressBar();
+  updateLaunchBtn();
+
+  human('✦ Démarrage — sujet « ' + topic + ' » · ' + nNews + ' actualité(s) · style « ' + (state.style.name || '—') + ' »');
+
+  try {
+    setStatus('Collecte des actualités…');
+    setPhase('📰 Collecte…', '');
+    const all = await collectNews(topic);
+    if (!all.length) throw new Error('Aucune actualité trouvée');
+    state.news = all.slice(0, nNews);
+    debug(state.news.length + ' actualité(s) retenues', 'ok');
+
+    setStatus('Analyse éditoriale…');
+    setPhase('🧠 Analyse de ' + state.news.length + ' actualité(s)…', '');
+
+    for (let i = 0; i < state.news.length; i++) {
+      if (state.stopRequested) throw new Error('Arrêt');
+      const article = state.news[i];
+      human('🧠 Analyse #' + (i + 1) + '/' + state.news.length + ' · ' + trunc(article.title, 60));
+      let analysis;
+      try {
+        analysis = await analyzeNews(article);
+      } catch (e) {
+        debug('Analyse échouée news ' + (i + 1) + ' : ' + e.message, 'err');
+        analysis = {
+          titre_court: article.title.slice(0, 100),
+          qui: 'Non précisé',
+          quoi: article.description ? article.description.slice(0, 120) : article.title,
+          quand: article.pubDate ? new Date(article.pubDate).toLocaleDateString('fr-FR') : 'récent',
+          ou: 'France',
+          pourquoi: 'Contexte à préciser',
+          scenes: [1, 2, 3, 4].map(k => ({
+            titre: 'Tableau ' + k,
+            description_en: 'A vertical hand-painted scene evoking: ' + article.title + ', rendered in the chosen visual style, single clear subject, empty background.'
+          }))
+        };
+      }
+
+      const scenes = analysis.scenes.map((s, k) => {
+        const uid = 'p_' + i + '_' + k + '_' + Math.random().toString(36).slice(2, 8);
+        const fullPrompt = buildImagePrompt(s.description_en);
+        return {
+          uid: uid,
+          parentIndex: k,
+          titre: s.titre,
+          description_en: s.description_en,
+          fullPrompt: fullPrompt,
+          videoPrompt: buildVideoPrompt(s),
+          url: null,
+          status: 'pending',
+          error: null
+        };
+      });
+
+      const articleRec = {
+        news: article,
+        fiveW: {
+          titre_court: analysis.titre_court,
+          qui: analysis.qui,
+          quoi: analysis.quoi,
+          quand: analysis.quand,
+          ou: analysis.ou,
+          pourquoi: analysis.pourquoi
+        },
+        scenes: scenes
+      };
+      scenes.forEach(sc => { sc.parent5W = articleRec.fiveW; });
+      state.articles.push(articleRec);
+    }
+
+    renderAll();
+    $('resultsHeader').classList.remove('hidden');
+    state.total = state.articles.reduce((a, x) => a + x.scenes.length, 0);
+    updateProgressBar();
+    debug('Total à peindre : ' + state.total + ' tableaux', 'api');
+
+    setStatus('Peinture des tableaux…');
+    setPhase('🎨 Peinture des ' + state.total + ' tableaux…', '~' + fmtEta(state.total * 12 / Math.max(1, state.apiKeys.length)));
+
+    await generateAll();
+
+    human('✦ Journal terminé — ' + state.completed + ' / ' + state.total + ' tableau(x)');
+    toast(state.completed + ' tableau(x) peint(s)', 'success', 4000);
+    setPhase('✦ Terminé — ' + state.completed + ' / ' + state.total, '');
+
+  } catch (e) {
+    if (e.message === 'Arrêt' || state.stopRequested) {
+      human('⏹ Arrêté'); toast('Interrompu', 'warn');
+    } else {
+      debug('Erreur pipeline : ' + e.message, 'err');
+      human('❌ ' + e.message); toast(e.message, 'error', 4000);
+    }
+  } finally {
+    state.isRunning = false;
+    state.stopRequested = false;
+    $('stopBtn').classList.remove('visible');
+    setStatus(null);
+    updateLaunchBtn();
+    updateProgressBar();
+  }
+}
+
+async function generateAll() {
+  const queue = [];
+  state.articles.forEach(article => {
+    article.scenes.forEach(scene => queue.push({ article, scene }));
+  });
+
+  const nKeys = state.apiKeys.length;
+  const lastStartPerKey = {};
+  let idx = 0;
+
+  async function worker(slot) {
+    while (!state.stopRequested && idx < queue.length) {
+      const myIdx = idx++;
+      const item = queue[myIdx];
+      if (!item) return;
+      const { article, scene } = item;
+      const keySlot = slot % nKeys;
+      const now = Date.now();
+      const wait = Math.max(0, (lastStartPerKey[keySlot] || 0) + DELAY_PER_KEY_MS - now);
+      lastStartPerKey[keySlot] = Date.now() + wait;
+      if (wait > 0) await sleep(wait);
+      if (state.stopRequested) return;
+
+      scene.status = 'generating';
+      updatePaintingCard(scene);
+
+      try {
+        scene.url = await apiImage(scene.fullPrompt);
+        scene.status = 'done';
+        state.completed++;
+        debug('✔ Tableau ' + (scene.parentIndex + 1) + ' · ' + trunc(article.fiveW.titre_court, 40), 'ok');
+        human('🎨 ' + state.completed + '/' + state.total + ' · ' + trunc(article.fiveW.titre_court, 40));
+      } catch (e) {
+        if (e.message === 'Arrêt') { scene.status = 'pending'; return; }
+        scene.status = 'error';
+        scene.error = e.message;
+        scene.url = 'error';
+        state.completed++;
+        debug('✘ Tableau ' + (scene.parentIndex + 1) + ' · ' + e.message, 'err');
+      }
+      updatePaintingCard(scene);
+      updateProgressBar();
+      setPhase('🎨 ' + state.completed + ' / ' + state.total, '~' + fmtEta((state.total - state.completed) * 12 / Math.max(1, nKeys)));
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.max(1, nKeys) }, (_, i) => worker(i)));
+  state.newsDone = state.totalNews;
+  updateProgressBar();
+}
+
+function stopGeneration() {
+  if (!state.isRunning) return;
+  state.stopRequested = true;
+  human('⏹ Arrêt demandé…');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+function bind() {
+  $('validateBtn').onclick = validateAndSaveKeys;
+  $('clearBtn').onclick = () => {
+    $('keysInput').value = '';
+    state.apiKeys = [];
+    storageDel(KEYS_STORAGE);
+    $('keyStatus').className = 'status';
+    $('keyStatusText').textContent = 'Aucune clé enregistrée';
+    $('keyBadge').textContent = '0 validée';
+    updateLaunchBtn();
+    toast('Clés effacées', 'warn');
+  };
+
+  // Mode selector
+  document.querySelectorAll('.mode-opt').forEach(btn => {
+    btn.onclick = () => setMode(btn.dataset.mode);
+  });
+
+  // Image upload
+  $('refInput').onchange = (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f) handleRefFile(f);
+    e.target.value = '';
+  };
+  $('removeRefBtn').onclick = removeRef;
+
+  // Style text
+  $('styleTextInput').oninput = () => {
+    state.styleText = $('styleTextInput').value;
+    storageSet(STYLE_TEXT_STORAGE, state.styleText);
+    state.styleResolved = false;
+    refreshRefPanel();
+  };
+
+  // Style actions
+  $('analyzeStyleBtn').onclick = resolveStyle;
+  $('clearStyleBtn').onclick = clearStyle;
+
+  // Launch
+  $('launchBtn').onclick = runJournal;
+  $('stopBtn').onclick = stopGeneration;
+
+  $('topicInput').oninput = () => {
+    const v = ($('topicInput').value || '').trim() || 'actualité France';
+    $('topicBadge').textContent = v;
+  };
+
+  // Console
+  const handle = $('panelHandle');
+  const content = $('panelContent');
+  const toggle = $('panelToggle');
+  let open = false;
+  handle.onclick = (e) => {
+    if (e.target.tagName === 'BUTTON') return;
+    open = !open;
+    content.classList.toggle('hidden', !open);
+    toggle.textContent = (open ? '▲' : '▼') + ' CONSOLE';
+  };
+  $('copyConsoleBtn').onclick = (e) => {
+    e.stopPropagation();
+    const txt = state.debugLog.map(d => d.t + ' ' + d.m + (d.raw ? '\n' + d.raw : '')).join('\n');
+    const ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (er) {}
+    document.body.removeChild(ta);
+    toast(ok ? 'Console copiée' : 'Copie impossible', ok ? 'success' : 'error', 1500);
+  };
+  $('clearConsoleBtn').onclick = (e) => {
+    e.stopPropagation();
+    state.debugLog = [];
+    renderDebug();
+    toast('Console effacée', 'warn', 1200);
+  };
+
+  // Restore
+  try {
+    const saved = JSON.parse(storageGet(KEYS_STORAGE) || '[]');
+    if (Array.isArray(saved) && saved.length > 0) {
+      state.apiKeys = saved.filter(isValidKey);
+      $('keysInput').value = saved.join('\n');
+      if (state.apiKeys.length > 0) {
+        $('keyStatus').className = 'status ok';
+        $('keyStatusText').textContent = state.apiKeys.length + ' clé(s) restaurée(s)';
+        $('keyBadge').textContent = state.apiKeys.length + ' validée' + (state.apiKeys.length > 1 ? 's' : '');
+        $('rpmInfo').textContent = 'RPM cap ≈ ' + (state.apiKeys.length * 12);
+      }
+    }
+  } catch (e) {}
+  try {
+    const t = storageGet(TOPIC_STORAGE);
+    if (t) $('topicInput').value = t;
+  } catch (e) {}
+  try {
+    const st = storageGet(STYLE_TEXT_STORAGE);
+    if (st) { state.styleText = st; $('styleTextInput').value = st; }
+  } catch (e) {}
+  try {
+    const m = storageGet(MODE_STORAGE);
+    if (m === 'image' || m === 'text' || m === 'mixed') state.mode = m;
+  } catch (e) {}
+
+  setMode(state.mode);
+  refreshRefPanel();
+  updateLaunchBtn();
+  updateProgressBar();
+
+  human('✦ Style Journal prêt · 3 modes (image / texte / mixte) · 4 tableaux par actualité · 5W gravés sur chaque image');
+  debug('Style Journal v1 · modèle image=' + MODEL_IMAGE + ' · size=' + IMAGE_SIZE, 'api');
+  debug('Le style est extrait par analyse (vision ou chat), puis injecté dans chaque prompt · aucune image de référence envoyée au générateur', 'api');
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+else bind();
+</script>
+</body>
+</html>
